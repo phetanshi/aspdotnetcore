@@ -1,0 +1,13 @@
+﻿.imageThumbnail {
+    height: 200px;
+    width: auto;
+}
+
+.imageThumbnailList {
+    height: 100px;
+    width: auto;
+}
+
+.btn {
+    width: 75px;
+}

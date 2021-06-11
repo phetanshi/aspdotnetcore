@@ -1,0 +1,23 @@
+﻿@{
+    ViewBag.Title = "Not Found";
+}
+
+<div class="card">
+    <div class="card-header alert-danger">
+        <h1>Not Found!</h1>
+    </div>
+
+    <div class="card-body text-center">
+        <img class="card-img-top" style="height:auto; width:15%" src="~/images/page_notfound.png" asp-append-version="true" />
+
+        <h3>
+            @ViewBag.ErrorMessage
+        </h3>
+
+    </div>
+    <div class="card-footer text-center">
+        <a asp-action="index" asp-controller="home">
+            Click here to navigate to the home page
+        </a>
+    </div>
+</div>
