@@ -59,5 +59,49 @@ namespace EmployeeManagement.Controllers
             }
             return View(model);
         }
+
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var result = await signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+
+                    if (result.Succeeded)
+                    {
+                        if (!string.IsNullOrEmpty(returnUrl))
+                        {
+                            return Redirect(returnUrl);
+                        }
+                        else
+                        {
+                            return RedirectToAction("index", "home");
+                        }
+                    }
+
+                    ModelState.AddModelError(string.Empty, "Invalid Login Attempt");
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, ex.Message);
+                ModelState.AddModelError("", "An error occured while registring user. Please try again after sometime.");
+            }
+            return View(model);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            await signInManager.SignOutAsync();
+            return RedirectToAction("index", "home");
+        }
     }
 }

@@ -12,9 +12,11 @@ using EmployeeManagement.Utility;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EmployeeManagement.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly IHomeService _service;
@@ -29,6 +31,7 @@ namespace EmployeeManagement.Controllers
             this.logger = logger;
             _config = configuration;
         }
+        [AllowAnonymous]
         public IActionResult Index()
         {
             logger.LogDebug("Entered into into Action Method");
@@ -37,6 +40,7 @@ namespace EmployeeManagement.Controllers
             return View(empList);
         }
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Details(int Id)
         {
             logger.LogDebug("Entered into Details Action Method");
@@ -87,6 +91,7 @@ namespace EmployeeManagement.Controllers
             editModel.ExistingPhotoPath = model.PhotoPath;
             return View(editModel);
         }
+
         [HttpPost]
         public IActionResult Edit(HomeEditEmployeeViewModel model)
         {
