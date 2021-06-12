@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Hosting;
 using EmployeeManagement.Utility;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Configuration;
 
 namespace EmployeeManagement.Controllers
 {
@@ -19,12 +20,14 @@ namespace EmployeeManagement.Controllers
         private readonly IHomeService _service;
         private readonly IWebHostEnvironment hostingEnvironment;
         private readonly ILogger logger;
+        private readonly IConfiguration _config;
 
-        public HomeController(IHomeService service, IWebHostEnvironment hostingEnvironment, ILogger<HomeController> logger)
+        public HomeController(IHomeService service, IWebHostEnvironment hostingEnvironment, ILogger<HomeController> logger, IConfiguration configuration)
         {
             _service = service;
             this.hostingEnvironment = hostingEnvironment;
             this.logger = logger;
+            _config = configuration;
         }
         public IActionResult Index()
         {
@@ -123,9 +126,8 @@ namespace EmployeeManagement.Controllers
             string uniqueFileName = null;
             if (Photo != null)
             {
-                string uploadsFolder = Path.Combine(hostingEnvironment.WebRootPath, "images", "users");
-                uniqueFileName = Guid.NewGuid().ToString() + "_" + Photo.FileName;
-                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                uniqueFileName = Path.Combine(_config["EmployeeDPFolder"], Guid.NewGuid().ToString() + "_" + Photo.FileName);
+                string filePath = Path.Combine(hostingEnvironment.WebRootPath, uniqueFileName);
                 Photo.CopyTo(new FileStream(filePath, FileMode.Create));
             }
             return uniqueFileName;

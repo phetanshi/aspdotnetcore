@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EmployeeManagement.Migrations
 {
-    public partial class AtOnceWithAll : Migration
+    public partial class AtOne : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

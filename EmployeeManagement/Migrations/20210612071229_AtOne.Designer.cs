@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EmployeeManagement.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20210610053457_AtOnceWithAll")]
-    partial class AtOnceWithAll
+    [Migration("20210612071229_AtOne")]
+    partial class AtOne
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

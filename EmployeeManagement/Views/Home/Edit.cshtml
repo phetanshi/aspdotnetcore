@@ -1,7 +1,7 @@
 ﻿@model HomeEditEmployeeViewModel
 @{
     ViewBag.Title = "Employee Details";
-    var photoPath = "~/images/users/" + (Model.ExistingPhotoPath ?? "car.jpg");
+    var photoPath = Model.PhotoPath != null ? "~/" + Model.PhotoPath : "~/images/car.jpg";
 }
 
 <form enctype="multipart/form-data" asp-controller="home" asp-action="edit" method="post" class="mt-3">

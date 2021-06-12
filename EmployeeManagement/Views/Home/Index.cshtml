@@ -6,7 +6,7 @@
 <div class="card-group">
     @foreach (var employee in Model.Employees)
     {
-        var photoPath = "~/images/users/" + (employee.PhotoPath ?? "car.jpg");
+        var photoPath = employee.PhotoPath != null ? "~/" + employee.PhotoPath : "~/images/car.jpg";
         <div class="card m-3" style="min-width: 18rem; max-width:30.5%;">
             <div class="card-header">
                 <h3 class="text-uppercase fst-italic">@employee.Name</h3>
