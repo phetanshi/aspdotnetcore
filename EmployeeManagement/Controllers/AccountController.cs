@@ -11,6 +11,7 @@ using EmployeeManagement.Models;
 
 namespace EmployeeManagement.Controllers
 {
+    [AllowAnonymous]
     public class AccountController : Controller
     {
         private readonly UserManager<ApplicationUser> userManager;
@@ -101,6 +102,7 @@ namespace EmployeeManagement.Controllers
             }
             return View(model);
         }
+        
         [HttpPost]
         public async Task<IActionResult> Logout()
         {
@@ -109,7 +111,6 @@ namespace EmployeeManagement.Controllers
         }
 
         [AcceptVerbs("Get","Post")]
-        [AllowAnonymous]
         public async Task<IActionResult> IsEmailInUse(string email)
         {
             var user = await userManager.FindByEmailAsync(email);

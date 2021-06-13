@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EmployeeManagement.Models.ViewModels
 {
-    public class LoginViewModel
+    public class LoginViewModel : IViewModel
     {
         [Required]
         [EmailAddress]
@@ -18,5 +18,6 @@ namespace EmployeeManagement.Models.ViewModels
 
         [Display(Name = "Remember me")]
         public bool RememberMe { get; set; }
+        public string Message { get; set; }
     }
 }

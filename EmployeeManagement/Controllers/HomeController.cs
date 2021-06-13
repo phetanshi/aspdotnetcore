@@ -16,7 +16,6 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace EmployeeManagement.Controllers
 {
-    [Authorize]
     public class HomeController : Controller
     {
         private readonly IHomeService _service;
@@ -31,6 +30,7 @@ namespace EmployeeManagement.Controllers
             this.logger = logger;
             _config = configuration;
         }
+        
         [AllowAnonymous]
         public IActionResult Index()
         {
@@ -39,6 +39,7 @@ namespace EmployeeManagement.Controllers
             logger.LogDebug("Returning from into Action Method");
             return View(empList);
         }
+        
         [HttpGet]
         [AllowAnonymous]
         public IActionResult Details(int Id)
@@ -54,6 +55,7 @@ namespace EmployeeManagement.Controllers
             logger.LogDebug("Returning from Details Action Method");
             return View(employee);
         }
+        
         [HttpGet]
         public IActionResult Create()
         {
@@ -82,6 +84,7 @@ namespace EmployeeManagement.Controllers
 
             return View();
         }
+        
         [HttpGet]
         public IActionResult Edit(int Id)
         {
@@ -120,12 +123,14 @@ namespace EmployeeManagement.Controllers
             }
             return View(model);
         }
+        
         public IActionResult Delete(int Id)
         {
             var model = _service.Delete(Id);
             model.Message = "Employee have been deleted";
             return View("Details", model);
         }
+        
         private string GetUniqueFileName(IFormFile Photo)
         {
             string uniqueFileName = null;

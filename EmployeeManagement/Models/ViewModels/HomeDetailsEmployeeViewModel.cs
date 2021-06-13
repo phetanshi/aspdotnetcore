@@ -9,6 +9,5 @@ namespace EmployeeManagement.Models.ViewModels
     public class HomeDetailsEmployeeViewModel : Employee, IViewModel
     {
         public string Message { get; set; }
-
     }
 }

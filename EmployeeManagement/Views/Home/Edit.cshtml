@@ -4,6 +4,8 @@
     var photoPath = Model.PhotoPath != null ? "~/" + Model.PhotoPath : "~/images/car.jpg";
 }
 
+<div class="row text-capitalize text-center"><h3>Edit Employee</h3></div>
+
 <form enctype="multipart/form-data" asp-controller="home" asp-action="edit" method="post" class="mt-3">
     <partial name="_EmployeeFields" model="Model" />
     <div class="form-group row col-sm-4 offset-4">

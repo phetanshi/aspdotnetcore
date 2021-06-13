@@ -8,7 +8,7 @@ using EmployeeManagement.Attributes;
 
 namespace EmployeeManagement.Models.ViewModels
 {
-    public class RegisterViewModel
+    public class RegisterViewModel : IViewModel
     {
         [Required]
         [EmailAddress]
@@ -25,5 +25,6 @@ namespace EmployeeManagement.Models.ViewModels
         [Compare("Password", ErrorMessage = "Password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
         public string City { get; set; }
+        public string Message { get; set; }
     }
 }

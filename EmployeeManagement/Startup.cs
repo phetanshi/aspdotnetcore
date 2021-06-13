@@ -13,6 +13,8 @@ using EmployeeManagement.Service;
 using EmployeeManagement.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace EmployeeManagement
 {
@@ -36,7 +38,10 @@ namespace EmployeeManagement
                 options.Password.RequiredLength = 8;
             }).AddEntityFrameworkStores<AppDBContext>();
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews(config => {
+                var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+                config.Filters.Add(new AuthorizeFilter(policy));
+            });
             //services.AddScoped<IEmployeeRepository, MockEmployeeRepository>();
             services.AddScoped<IEmployeeRepository, SqlEmployeeRepository>();
             services.AddScoped<IHomeService, HomeService>();
