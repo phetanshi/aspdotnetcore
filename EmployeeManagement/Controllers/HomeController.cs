@@ -34,26 +34,42 @@ namespace EmployeeManagement.Controllers
         [AllowAnonymous]
         public IActionResult Index()
         {
-            logger.LogDebug("Entered into into Action Method");
-            var empList = _service.Get();
-            logger.LogDebug("Returning from into Action Method");
-            return View(empList);
+            HomeIndexEmployeeViewModel model = null;
+            try
+            {
+                logger.LogDebug("Entered into into Action Method");
+                model = _service.Get();
+                logger.LogDebug("Returning from into Action Method");
+            }
+            catch(Exception ex)
+            {
+                logger.LogError(ex, ex.Message);
+            }
+            return View(model);
         }
         
         [HttpGet]
         [AllowAnonymous]
         public IActionResult Details(int Id)
         {
-            logger.LogDebug("Entered into Details Action Method");
-            var employee = _service.Get(Id);
-
-            if (employee == null)
+            HomeDetailsEmployeeViewModel model = null;
+            try
             {
-                Response.StatusCode = 404;
-                return View("EmployeeNotFound", Id);
+                logger.LogDebug("Entered into Details Action Method");
+                model = _service.Get(Id);
+
+                if (model == null)
+                {
+                    Response.StatusCode = 404;
+                    return View("EmployeeNotFound", Id);
+                }
+                logger.LogDebug("Returning from Details Action Method");
             }
-            logger.LogDebug("Returning from Details Action Method");
-            return View(employee);
+            catch (Exception ex)
+            {
+                logger.LogError(ex, ex.Message);
+            }
+            return View(model);
         }
         
         [HttpGet]
@@ -65,21 +81,28 @@ namespace EmployeeManagement.Controllers
         [HttpPost]
         public IActionResult Create(HomeCreateEmployeeViewModel model)
         {
-            if (ModelState.IsValid)
+            try
             {
-                string uniqueFileName = GetUniqueFileName(model.Photo);
-                model.PhotoPath = uniqueFileName;
-                _service.Add(model);
-                
-                HomeDetailsEmployeeViewModel detailsViewMode = new HomeDetailsEmployeeViewModel();
-                detailsViewMode.Id = model.Id;
-                detailsViewMode.Name = model.Name;
-                detailsViewMode.Email = model.Email;
-                detailsViewMode.PhotoPath = model.PhotoPath;
-                detailsViewMode.Department = model.Department;
-                detailsViewMode.Message = "New employee have been created";
+                if (ModelState.IsValid)
+                {
+                    string uniqueFileName = GetUniqueFileName(model.Photo);
+                    model.PhotoPath = uniqueFileName;
+                    _service.Add(model);
 
-                return View("Details", detailsViewMode);
+                    HomeDetailsEmployeeViewModel detailsViewMode = new HomeDetailsEmployeeViewModel();
+                    detailsViewMode.Id = model.Id;
+                    detailsViewMode.Name = model.Name;
+                    detailsViewMode.Email = model.Email;
+                    detailsViewMode.PhotoPath = model.PhotoPath;
+                    detailsViewMode.Department = model.Department;
+                    detailsViewMode.Message = "New employee have been created";
+
+                    return View("Details", detailsViewMode);
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, ex.Message);
             }
 
             return View();
@@ -88,46 +111,69 @@ namespace EmployeeManagement.Controllers
         [HttpGet]
         public IActionResult Edit(int Id)
         {
-            HomeDetailsEmployeeViewModel model = _service.Get(Id);
-            HomeEditEmployeeViewModel editModel = new HomeEditEmployeeViewModel();
-            PropertyCopy.Copy(model, editModel);
-            editModel.ExistingPhotoPath = model.PhotoPath;
-            return View(editModel);
+            HomeDetailsEmployeeViewModel model = null;
+            try
+            {
+                model = _service.Get(Id);
+                HomeEditEmployeeViewModel editModel = new HomeEditEmployeeViewModel();
+                PropertyCopy.Copy(model, editModel);
+                editModel.ExistingPhotoPath = model.PhotoPath;
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, ex.Message);
+            }
+            return View(model);
         }
 
         [HttpPost]
         public IActionResult Edit(HomeEditEmployeeViewModel model)
         {
-            if (ModelState.IsValid)
+            try
             {
-                string uniqueFileName = GetUniqueFileName(model.Photo);
-                model.PhotoPath = uniqueFileName;
-                _service.Update(model);
+                if (ModelState.IsValid)
+                {
+                    string uniqueFileName = GetUniqueFileName(model.Photo);
+                    model.PhotoPath = uniqueFileName;
+                    _service.Update(model);
 
-                HomeDetailsEmployeeViewModel detailsViewMode = new HomeDetailsEmployeeViewModel();
+                    HomeDetailsEmployeeViewModel detailsViewMode = new HomeDetailsEmployeeViewModel();
 
-                //PropertyCopy.Copy(model, detailsViewMode);
+                    //PropertyCopy.Copy(model, detailsViewMode);
 
-                detailsViewMode.Message = "Employee have been updated";
-                detailsViewMode.Id = model.Id;
-                detailsViewMode.Name = model.Name;
-                detailsViewMode.Email = model.Email;
-                detailsViewMode.PhotoPath = model.PhotoPath;
-                detailsViewMode.Department = model.Department;
+                    detailsViewMode.Message = "Employee have been updated";
+                    detailsViewMode.Id = model.Id;
+                    detailsViewMode.Name = model.Name;
+                    detailsViewMode.Email = model.Email;
+                    detailsViewMode.PhotoPath = model.PhotoPath;
+                    detailsViewMode.Department = model.Department;
 
-                return View("Details", detailsViewMode);
+                    return View("Details", detailsViewMode);
+                }
+                else
+                {
+                    model.Message = "Model Validation Failed";
+                }
             }
-            else
+            catch (Exception ex)
             {
-                model.Message = "Model Validation Failed";
+                logger.LogError(ex, ex.Message);
             }
             return View(model);
         }
         
         public IActionResult Delete(int Id)
         {
-            var model = _service.Delete(Id);
-            model.Message = "Employee have been deleted";
+            HomeDetailsEmployeeViewModel model = null;
+            try
+            {
+                model = _service.Delete(Id);
+                model.Message = "Employee have been deleted";
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, ex.Message);
+            }
             return View("Details", model);
         }
         
