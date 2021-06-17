@@ -289,8 +289,8 @@ namespace EmployeeManagement.Controllers
                 {
                     ModelState.AddModelError("", error.Description);
                 }
-
-                return View("ListUsers");
+                var users = userManager.Users;
+                return RedirectToAction("ListUsers", users);
             }
         }
         [HttpGet]
