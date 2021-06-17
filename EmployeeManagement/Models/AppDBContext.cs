@@ -11,13 +11,18 @@ namespace EmployeeManagement.Models
     {
         public AppDBContext(DbContextOptions<AppDBContext> options):base(options)
         {
-
+            
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
             builder.Seed();
+
+            foreach (var foreignKey in builder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+            {
+                foreignKey.DeleteBehavior = DeleteBehavior.Restrict;
+            }
         }
         public DbSet<Employee> Employees { get; set; }
     }

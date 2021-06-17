@@ -1,0 +1,49 @@
+﻿@*<div class="alert alert-danger">
+        <h3>
+            An occured while processing your request. The support
+            team is notified and we are working on the fix
+        </h3>
+        <h5>Please contact us on padmasekhar.ps16@gmail.com</h5>
+    </div>*@
+
+@if (ViewBag.ErrorTitle == null)
+{
+    <div class="card mt-1">
+        <div class="card-header alert-danger">
+            <h1>Error!</h1>
+        </div>
+
+        <div class="card-body text-center">
+            <img class="card-img-top" style="height:auto; width:15%" src="~/images/error.png" asp-append-version="true" />
+
+            <h3>
+                An error occured while processing your request. The support
+                team is notified and we are working on the fix
+            </h3>
+
+        </div>
+        <div class="card-footer text-center">
+            <h5>Please contact us on <a href="mailto:padmasekhar.ps16@gmail.com">padmasekhar.ps16@gmail.com</a></h5>
+        </div>
+    </div>
+}
+else
+{
+    <div class="card mt-1">
+        <div class="card-header alert-danger">
+            <h1>@ViewBag.ErrorTitle</h1>
+        </div>
+
+        <div class="card-body text-center">
+            <img class="card-img-top" style="height:auto; width:15%" src="~/images/error.png" asp-append-version="true" />
+
+            <h3>
+                @ViewBag.ErrorMessage
+            </h3>
+
+        </div>
+        <div class="card-footer text-center">
+            <h5>Please contact us on <a href="mailto:padmasekhar.ps16@gmail.com">padmasekhar.ps16@gmail.com</a></h5>
+        </div>
+    </div>
+}
