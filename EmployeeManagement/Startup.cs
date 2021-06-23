@@ -48,6 +48,12 @@ namespace EmployeeManagement
                 options.AccessDeniedPath = new PathString("/Administration/AccessDenied");
             });
 
+            services.AddAuthorization(options => {
+                options.AddPolicy("DeleteRolePolicy", 
+                    policy => policy.RequireClaim("Delete Role")
+                                    .RequireClaim("Create Role"));
+            });
+
             //services.AddScoped<IEmployeeRepository, MockEmployeeRepository>();
             services.AddScoped<IEmployeeRepository, SqlEmployeeRepository>();
             services.AddScoped<IHomeService, HomeService>();
