@@ -15,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using EmployeeManagement.Security;
 
 namespace EmployeeManagement
 {
@@ -49,14 +50,32 @@ namespace EmployeeManagement
             });
 
             services.AddAuthorization(options => {
-                options.AddPolicy("DeleteRolePolicy", policy => policy.RequireClaim("Delete Role"));
-                options.AddPolicy("EditRolePolicy", policy => policy.RequireClaim("Edit Role"));
-                options.AddPolicy("AdminRolePolicy", policy => policy.RequireRole("Admin"));
+                //options.AddPolicy("EditRolePolicy", policy => policy.RequireClaim("Edit Role").RequireRole("Admin"));
+                //options.AddPolicy("EditRolePolicy", policy => policy.RequireAssertion(context => AuthorizeAccess(context, "Edit Role")));
+
+                options.AddPolicy("AdminRolePolicy", policy => policy.RequireAssertion(context => AuthorizeAccess(context)));
+
+                options.AddPolicy("EditRolePolicy", policy => policy.AddRequirements(new ManageAdminRolesAndClaimsRequirement()));
+
+                options.AddPolicy("DeleteRolePolicy", policy => policy.RequireAssertion(context => AuthorizeAccess(context, "Delete Role")));
             });
 
             //services.AddScoped<IEmployeeRepository, MockEmployeeRepository>();
             services.AddScoped<IEmployeeRepository, SqlEmployeeRepository>();
             services.AddScoped<IHomeService, HomeService>();
+            services.AddSingleton<IAuthorizationHandler, CanEditOnlyOtherAdminRolesAndClaimsHandler>();
+        }
+
+        private bool AuthorizeAccess(AuthorizationHandlerContext context, string claimType)
+        {
+            return context.User.IsInRole("Admin") &&
+                    context.User.HasClaim(claim => claim.Type == claimType && claim.Value == "true") ||
+                    context.User.IsInRole("Super Admin");
+        }
+
+        private bool AuthorizeAccess(AuthorizationHandlerContext context)
+        {
+            return context.User.IsInRole("Admin")  || context.User.IsInRole("Super Admin");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
