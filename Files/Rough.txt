@@ -1,0 +1,7 @@
+CoreEmployeeManagementSTS
+
+CoreEmployeeManagementClient
+
+
+Google Client ID : 1041779151851-o651the9tdl2mla5gtea88h7p715hgdj.apps.googleusercontent.com
+Google Client Secret : FMAKd0dXQfPWaPsK7aKKkAjh
