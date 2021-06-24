@@ -64,6 +64,7 @@ namespace EmployeeManagement
             services.AddScoped<IEmployeeRepository, SqlEmployeeRepository>();
             services.AddScoped<IHomeService, HomeService>();
             services.AddSingleton<IAuthorizationHandler, CanEditOnlyOtherAdminRolesAndClaimsHandler>();
+            services.AddSingleton<IAuthorizationHandler, SuperAdminHandler>();
         }
 
         private bool AuthorizeAccess(AuthorizationHandlerContext context, string claimType)
