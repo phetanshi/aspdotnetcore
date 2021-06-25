@@ -1,7 +1,11 @@
 CoreEmployeeManagementSTS
 
 CoreEmployeeManagementClient
+CoreEmpMgnmtFClient
 
 
 Google Client ID : 1041779151851-o651the9tdl2mla5gtea88h7p715hgdj.apps.googleusercontent.com
 Google Client Secret : FMAKd0dXQfPWaPsK7aKKkAjh
+
+
+Install-Package Microsoft.AspNetCore.Authentication.Google -Version 3.0.0-preview8.19405.7

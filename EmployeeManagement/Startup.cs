@@ -13,6 +13,7 @@ using EmployeeManagement.Service;
 using EmployeeManagement.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using EmployeeManagement.Security;
@@ -39,9 +40,20 @@ namespace EmployeeManagement
                 options.Password.RequiredLength = 8;
             }).AddEntityFrameworkStores<AppDBContext>();
 
-            services.AddControllersWithViews(config => {
+            services.AddControllersWithViews(config =>
+            {
                 var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
                 config.Filters.Add(new AuthorizeFilter(policy));
+            });
+
+            services.AddAuthentication().AddGoogle(options =>
+            {
+                options.ClientId = "1041779151851-o651the9tdl2mla5gtea88h7p715hgdj.apps.googleusercontent.com";
+                options.ClientSecret = "FMAKd0dXQfPWaPsK7aKKkAjh";
+            }).AddFacebook(options =>
+            {
+                options.AppId = "632829747675157";
+                options.AppSecret = "d8c60cb339e61df91f9d31e9f98a5676";
             });
 
             services.ConfigureApplicationCookie(options =>
@@ -49,7 +61,8 @@ namespace EmployeeManagement
                 options.AccessDeniedPath = new PathString("/Administration/AccessDenied");
             });
 
-            services.AddAuthorization(options => {
+            services.AddAuthorization(options =>
+            {
                 //options.AddPolicy("EditRolePolicy", policy => policy.RequireClaim("Edit Role").RequireRole("Admin"));
                 //options.AddPolicy("EditRolePolicy", policy => policy.RequireAssertion(context => AuthorizeAccess(context, "Edit Role")));
 
@@ -76,7 +89,7 @@ namespace EmployeeManagement
 
         private bool AuthorizeAccess(AuthorizationHandlerContext context)
         {
-            return context.User.IsInRole("Admin")  || context.User.IsInRole("Super Admin");
+            return context.User.IsInRole("Admin") || context.User.IsInRole("Super Admin");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
