@@ -48,8 +48,20 @@ namespace EmployeeManagement.Controllers
 
                     if (result.Succeeded)
                     {
-                        await signInManager.SignInAsync(user, isPersistent: false);
-                        return RedirectToAction("index", "home");
+
+                        var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
+                        var confirmationLink = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, token = token }, Request.Scheme);
+                        logger.LogWarning(confirmationLink);
+
+                        if (signInManager.IsSignedIn(User) && (User.IsInRole("Admin") || User.IsInRole("Super Admin")))
+                        {
+                            return RedirectToAction("ListUsers", "Administration");
+                        }
+
+                        ViewBag.InfoTitle = "Registration successful";
+                        ViewBag.InfoMessage = "Before you can Login, please confirm your " +
+                                "email, by clicking on the confirmation link we have emailed you";
+                        return View("Information");
                     }
 
                     foreach (var error in result.Errors)
@@ -58,12 +70,40 @@ namespace EmployeeManagement.Controllers
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 logger.LogError(ex, ex.Message);
                 ModelState.AddModelError("", "An error occured while registring user. Please try again after sometime.");
             }
             return View(model);
+        }
+
+        [AllowAnonymous]
+        public async Task<IActionResult> ConfirmEmail(string userId, string token)
+        {
+            if (userId == null || token == null)
+            {
+                return RedirectToAction("index", "home");
+            }
+
+            var user = await userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = $"The User ID {userId} is invalid";
+                return View("NotFound");
+            }
+
+            var result = await userManager.ConfirmEmailAsync(user, token);
+            if (result.Succeeded)
+            {
+                ViewBag.IsConfirmation = true;
+                ViewBag.InfoTitle = "Email Confirmation successful";
+                ViewBag.InfoMessage = "You email confirmation was successfull. Now you can login to the application.";
+                return View("Information");
+            }
+
+            ViewBag.ErrorTitle = "Email cannot be confirmed";
+            return View("Error");
         }
 
         [HttpGet]
@@ -222,11 +262,11 @@ namespace EmployeeManagement.Controllers
             return RedirectToAction("index", "home");
         }
 
-        [AcceptVerbs("Get","Post")]
+        [AcceptVerbs("Get", "Post")]
         public async Task<IActionResult> IsEmailInUse(string email)
         {
             var user = await userManager.FindByEmailAsync(email);
-            if(user == null)
+            if (user == null)
             {
                 return Json(true);
             }
