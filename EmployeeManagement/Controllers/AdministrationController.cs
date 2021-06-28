@@ -140,11 +140,11 @@ namespace EmployeeManagement.Controllers
                 return View("NotFound");
             }
 
-            var model = new List<UserRoleViewModel>();
+            var model = new List<UserViewModel>();
             var users = userManager.Users.ToList();
             foreach (var user in users)
             {
-                var userRoleViewModel = new UserRoleViewModel
+                var userRoleViewModel = new UserViewModel
                 {
                     UserId = user.Id,
                     UserName = user.UserName
@@ -166,7 +166,7 @@ namespace EmployeeManagement.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditUsersInRole(List<UserRoleViewModel> model, string roleId)
+        public async Task<IActionResult> EditUsersInRole(List<UserViewModel> model, string roleId)
         {
             var role = await roleManager.FindByIdAsync(roleId);
 

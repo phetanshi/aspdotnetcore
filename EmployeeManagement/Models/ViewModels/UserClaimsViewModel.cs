@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace EmployeeManagement.Models.ViewModels
 {
-    public class UserClaimsViewModel
+    public class UserClaimsViewModel : IViewModel
     {
         public UserClaimsViewModel()
         {
@@ -14,5 +15,6 @@ namespace EmployeeManagement.Models.ViewModels
 
         public string UserId { get; set; }
         public List<UserClaim> Cliams { get; set; }
+        public string Message { get; set; }
     }
 }

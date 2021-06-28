@@ -5,11 +5,13 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using EmployeeManagement.Attributes;
+using Microsoft.Extensions.Configuration;
 
 namespace EmployeeManagement.Models.ViewModels
 {
     public class RegisterViewModel : IViewModel
     {
+
         [Required]
         [EmailAddress]
         [Remote(action: "IsEmailInUse", controller:"account")]
